@@ -11,9 +11,6 @@ const {
 } = process.env;
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
-// Check every 10 min
-const interval = 600000;
-
 const url =
   "https://americanbarbell.com/collections/weights/products/american-barbell-black-kg-sport-bumper-plates";
 
@@ -71,23 +68,21 @@ async function getStockList() {
     });
 }
 
-function main() {
-  setInterval(async () => {
-    log("Getting stocklist...");
-    const list = await getStockList();
-    log("list --- ", list);
-    if (list.length > 0 && !DRY_RUN) {
-      const mainMsg = await bot.telegram.sendMessage(
-        TELEGRAM_CHAT_ID,
-        getCopy(list),
-        {
-          parse_mode: "HTML",
-          disable_web_page_preview: true,
-        }
-      );
-      log("mainMsg --- ", mainMsg);
-    }
-  }, interval);
+async function main() {
+  log("Getting stocklist...");
+  const list = await getStockList();
+  log("list --- ", list);
+  if (list.length > 0 && !DRY_RUN) {
+    const mainMsg = await bot.telegram.sendMessage(
+      TELEGRAM_CHAT_ID,
+      getCopy(list),
+      {
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+      }
+    );
+    log("mainMsg --- ", mainMsg);
+  }
 }
 
 main();
