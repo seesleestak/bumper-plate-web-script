@@ -2,7 +2,7 @@ const { JSDOM } = require("jsdom");
 const axios = require("axios");
 const { Telegraf } = require("telegraf");
 
-require('dotenv').config()
+require("dotenv").config();
 
 const {
   TELEGRAM_BOT_TOKEN = "",
@@ -18,7 +18,7 @@ const url =
   "https://americanbarbell.com/collections/weights/products/american-barbell-black-kg-sport-bumper-plates";
 
 function log(...args) {
-  console.log(new Date().toUTCString(), ...args);
+  console.log(new Date().toUTCString(), "|", ...args);
 }
 
 function getCopy(list) {
@@ -76,18 +76,16 @@ function main() {
     log("Getting stocklist...");
     const list = await getStockList();
     log("list --- ", list);
-    if (list.length > 0) {
-      if (!DRY_RUN) {
-        const mainMsg = await bot.telegram.sendMessage(
-          TELEGRAM_CHAT_ID,
-          getCopy(list),
-          {
-            parse_mode: "HTML",
-            disable_web_page_preview: true,
-          }
-        );
-        log("mainMsg --- ", mainMsg);
-      }
+    if (list.length > 0 && !DRY_RUN) {
+      const mainMsg = await bot.telegram.sendMessage(
+        TELEGRAM_CHAT_ID,
+        getCopy(list),
+        {
+          parse_mode: "HTML",
+          disable_web_page_preview: true,
+        }
+      );
+      log("mainMsg --- ", mainMsg);
     }
   }, interval);
 }
