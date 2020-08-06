@@ -15,7 +15,7 @@ const url =
   "https://americanbarbell.com/collections/weights/products/american-barbell-black-kg-sport-bumper-plates";
 
 function log(...args) {
-  console.log(new Date().toString(), "|", ...args);
+  console.log(new Date().toUTCString(), "|", ...args);
 }
 
 function getCopy(list) {
@@ -81,8 +81,8 @@ async function main() {
   const date = new Date();
   if (
     date.getDay() === 1 &&
-    date.getHours() === 7 &&
-    date.getMinutes() === 40
+    date.getHours() === 15 &&
+    date.getMinutes() === 0
   ) {
     await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, "Still alive...");
   }
