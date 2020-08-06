@@ -15,7 +15,7 @@ const url =
   "https://americanbarbell.com/collections/weights/products/american-barbell-black-kg-sport-bumper-plates";
 
 function log(...args) {
-  console.log(new Date().toUTCString(), "|", ...args);
+  console.log(new Date().toString(), "|", ...args);
 }
 
 function getCopy(list) {
@@ -62,13 +62,31 @@ async function getStockList() {
 
       return stockList;
     })
-    .catch((e) => {
+    .catch(async (e) => {
       log("ERROR:", e);
+      await bot.telegram.sendMessage(
+        TELEGRAM_CHAT_ID,
+        `Error:
+
+      <code>${e}</code>`,
+        {
+          parse_mode: "HTML",
+        }
+      );
       return [];
     });
 }
 
 async function main() {
+  const date = new Date();
+  if (
+    date.getDay() === 1 &&
+    date.getHours() === 7 &&
+    date.getMinutes() === 40
+  ) {
+    await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, "Still alive...");
+  }
+
   log("Getting stocklist...");
   const list = await getStockList();
   log("list --- ", list);
