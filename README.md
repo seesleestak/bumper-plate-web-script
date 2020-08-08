@@ -1,6 +1,6 @@
 # kg-bumper-stocklist
 
-A script to scrape the [American Barbell](https://americanbarbell.com/) website to check for bumper plate stock and send notifications via a [Telegram](https://telegram.org/) bot.
+A script to scrape the [American Barbell](https://americanbarbell.com/) and [Rogue Fitness](https://www.roguefitness.com/) websites to check for bumper plate stock and send notifications via a [Telegram](https://telegram.org/) bot.
 
 ## Getting Started
 
@@ -17,4 +17,4 @@ Then install dependencies and start it up:
 npm i && npm start
 ```
 
-The script will check the webpage for stock changes every 10 minutes. If anything comes back into stock, the your Telegram bot will message you.
+The script will check the webpages for stock changes. If anything comes back into stock, the Telegram bot will message you.
