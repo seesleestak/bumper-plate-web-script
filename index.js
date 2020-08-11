@@ -7,13 +7,26 @@ require("dotenv").config();
 const { TELEGRAM_BOT_TOKEN = "", TELEGRAM_CHAT_ID = "" } = process.env;
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
-const rogueHgUrl = "https://www.roguefitness.com/kg-rogue-bumpers";
-const rogueTrainingStripedUrl =
-  "https://www.roguefitness.com/rogue-black-training-kg-striped-plates";
-const rogueTrainingPlatesUrl =
-  "https://www.roguefitness.com/rogue-kg-training-2-0-plates";
-const americanBarbellUrl =
-  "https://americanbarbell.com/collections/weights/products/american-barbell-black-kg-sport-bumper-plates";
+const productMap = {
+  ["Rep Fitness Competition"]: {
+    url:
+      "https://www.repfitness.com/bars-plates/olympic-plates/rep-competition-bumper-plates-kg",
+    handler: repHandler,
+  },
+  ["Rogue Training 2.0"]: {
+    url: "https://www.roguefitness.com/rogue-kg-training-2-0-plates",
+    handler: rogueHandler,
+  },
+  ["Rogue Training Striped"]: {
+    url: "https://www.roguefitness.com/rogue-black-training-kg-striped-plates",
+    handler: rogueHandler,
+  },
+  ["American Barbell"]: {
+    url:
+      "https://americanbarbell.com/collections/weights/products/american-barbell-black-kg-sport-bumper-plates",
+    handler: americanBarbellHandler,
+  },
+};
 
 function log(...args) {
   console.log(new Date().toUTCString(), "|", ...args);
@@ -21,10 +34,14 @@ function log(...args) {
 
 async function handleError(e, type) {
   log(`${type} ERROR:`, e);
-  await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, `<code>${e}</code>`, {
-    parse_mode: "HTML",
-  });
-  return [];
+  await bot.telegram.sendMessage(
+    TELEGRAM_CHAT_ID,
+    `<b>Error in ${type} handler:</b>
+<code>${e}</code>`,
+    {
+      parse_mode: "HTML",
+    }
+  );
 }
 
 async function sendStockMessage(list, type, url) {
@@ -47,7 +64,23 @@ async function sendStockMessage(list, type, url) {
   log("mainMsg --- ", mainMsg);
 }
 
-async function getRogueStockList(url) {
+async function repHandler(url, name) {
+  return axios
+    .get(url)
+    .then((response) => {
+      const dom = new JSDOM(response.data);
+      const document = dom.window.document;
+
+      const stockClass = document.getElementsByClassName("out-of-stock")[0];
+      if (!stockClass) {
+        return ['In stock on site!']
+      }
+      return [];
+    })
+    .catch((e) => handleError(e, name));
+}
+
+async function rogueHandler(url, name) {
   return axios
     .get(url)
     .then((response) => {
@@ -69,12 +102,12 @@ async function getRogueStockList(url) {
 
       return stockList;
     })
-    .catch((e) => handleError(e, "Rogue Fitness"));
+    .catch((e) => handleError(e, name));
 }
 
-async function getAmericanBarbellStocklist() {
+async function americanBarbellHandler(url, name) {
   return axios
-    .get(americanBarbellUrl)
+    .get(url)
     .then((response) => {
       const dom = new JSDOM(response.data);
       const document = dom.window.document;
@@ -103,7 +136,7 @@ async function getAmericanBarbellStocklist() {
 
       return stockList;
     })
-    .catch((e) => handleError(e, "American Barbell"));
+    .catch((e) => handleError(e, name));
 }
 
 async function main() {
@@ -116,41 +149,16 @@ async function main() {
     await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, "Still alive...");
   }
 
-  log("Getting American Barbell stocklist...");
-  const abStocklist = await getAmericanBarbellStocklist();
-  if (abStocklist.length > 0) {
-    await sendStockMessage(abStocklist, "American Barbell", americanBarbellUrl);
-  }
-
-  log("Getting Rogue HG stocklist...");
-  const rogueHgStocklist = await getRogueStockList(rogueHgUrl);
-  if (rogueHgStocklist.length > 0) {
-    await sendStockMessage(rogueHgStocklist, "Rogue HG", rogueHgUrl);
-  }
-
-  log("Getting Rogue Training Striped stocklist...");
-  const rogueTrainingStripedList = await getRogueStockList(
-    rogueTrainingStripedUrl
+  await Promise.all(
+    Object.keys(productMap).map(async (name) => {
+      const { handler, url } = productMap[name];
+      log(`Getting ${name} stocklist...`);
+      const stocklist = await handler(url);
+      if (stocklist.length > 0) {
+        await sendStockMessage(stocklist, name, url);
+      }
+    })
   );
-  if (rogueTrainingStripedList.length > 0) {
-    await sendStockMessage(
-      rogueTrainingStripedList,
-      "Rogue Training Striped",
-      rogueTrainingStripedUrl
-    );
-  }
-
-  log("Getting Rogue Training 2.0 stocklist...");
-  const rogueTrainingStocklist = await getRogueStockList(
-    rogueTrainingPlatesUrl
-  );
-  if (rogueTrainingStocklist.length > 0) {
-    await sendStockMessage(
-      rogueTrainingStocklist,
-      "Rogue Training 2.0",
-      rogueTrainingPlatesUrl
-    );
-  }
 }
 
 main();
