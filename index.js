@@ -36,8 +36,9 @@ async function handleError(e, type) {
   log(`${type} ERROR:`, e);
   await bot.telegram.sendMessage(
     TELEGRAM_CHAT_ID,
-    `<b>Error in ${type} handler:</b>
-<code>${e}</code>`,
+    `<code>${e}</code>
+
+<i>In ${type} handler</i>`,
     {
       parse_mode: "HTML",
     }
@@ -57,11 +58,11 @@ async function sendStockMessage(list, type, url) {
 <a href="${url}">Go to product page</a>`;
   const copy = title.concat(stockList).concat(link);
 
-  const mainMsg = await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, copy, {
+  await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, copy, {
     parse_mode: "HTML",
     disable_web_page_preview: true,
   });
-  log("mainMsg --- ", mainMsg);
+  log("Stock message sent!");
 }
 
 async function repHandler(url, name) {
@@ -73,7 +74,7 @@ async function repHandler(url, name) {
 
       const stockClass = document.getElementsByClassName("out-of-stock")[0];
       if (!stockClass) {
-        return ['In stock on site!']
+        return ["In stock on site!"];
       }
       return [];
     })
