@@ -1,6 +1,6 @@
 # kg-bumper-stocklist
 
-A script to scrape the [American Barbell](https://americanbarbell.com/) and [Rogue Fitness](https://www.roguefitness.com/) websites to check for bumper plate stock and send notifications via a [Telegram](https://telegram.org/) bot.
+A script to scrape the [American Barbell](https://americanbarbell.com/), [Rogue Fitness](https://www.roguefitness.com/), and [Rep Fitness](https://www.repfitness.com/) websites to check for bumper plate stock and send notifications via a [Telegram](https://telegram.org/) bot.
 
 ## Getting Started
 
