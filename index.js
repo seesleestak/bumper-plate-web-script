@@ -154,7 +154,7 @@ async function main() {
     Object.keys(productMap).map(async (name) => {
       const { handler, url } = productMap[name];
       log(`Getting ${name} stocklist...`);
-      const stocklist = await handler(url);
+      const stocklist = await handler(url, name);
       if (stocklist.length > 0) {
         await sendStockMessage(stocklist, name, url);
       }
