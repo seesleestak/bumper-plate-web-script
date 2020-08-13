@@ -150,7 +150,7 @@ async function main() {
     await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, "Still alive...");
   }
 
-  await Promise.all(
+  await Promise.allSettled(
     Object.keys(productMap).map(async (name) => {
       const { handler, url } = productMap[name];
       log(`Getting ${name} stocklist...`);
