@@ -21,6 +21,10 @@ const productMap = {
     url: "https://www.roguefitness.com/rogue-black-training-kg-striped-plates",
     handler: rogueHandler,
   },
+  ["Rogue HG 2.0"]: {
+    url: "https://www.roguefitness.com/kg-rogue-bumpers",
+    handler: rogueHandler,
+  },
   ["American Barbell"]: {
     url:
       "https://americanbarbell.com/collections/weights/products/american-barbell-black-kg-sport-bumper-plates",
