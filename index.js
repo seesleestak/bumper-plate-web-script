@@ -45,6 +45,25 @@ async function handleError(e, type) {
   );
 }
 
+async function sendStatusMessage() {
+  const message = `Still alive...
+Currently watching the following products:
+`;
+  const productList = Object.keys(productMap).reduce((acc, item) => {
+    return acc.concat(`- <a href="${productMap[item].url}">${item}</a>
+`);
+  }, "");
+
+  await bot.telegram.sendMessage(
+    TELEGRAM_CHAT_ID,
+    message.concat(productList),
+    {
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+    }
+  );
+}
+
 async function sendStockMessage(list, type, url) {
   log("list --- ", list);
   const title = `<b>${type} Bumper Plates <u>IN STOCK</u>:</b>
@@ -147,14 +166,16 @@ async function main() {
     date.getHours() === 15 &&
     date.getMinutes() === 0
   ) {
-    await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, "Still alive...");
+    await sendStatusMessage();
   }
 
   await Promise.allSettled(
     Object.keys(productMap).map(async (name) => {
       const { handler, url } = productMap[name];
+
       log(`Getting ${name} stocklist...`);
       const stocklist = await handler(url, name);
+
       if (stocklist.length > 0) {
         await sendStockMessage(stocklist, name, url);
       }
