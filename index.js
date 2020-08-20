@@ -8,6 +8,10 @@ const { TELEGRAM_BOT_TOKEN = "", TELEGRAM_CHAT_ID = "" } = process.env;
 const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
 const productMap = {
+  ["Rogue KG Change Plates"]: {
+    url: "https://www.roguefitness.com/rogue-kg-change-plates",
+    handler: rogueHandler,
+  },
   ["Rep Fitness Competition"]: {
     url:
       "https://www.repfitness.com/bars-plates/olympic-plates/rep-competition-bumper-plates-kg",
