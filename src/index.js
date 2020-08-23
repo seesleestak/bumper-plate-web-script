@@ -17,7 +17,7 @@ const productMap = {
   },
   ["Rogue S-1 Squat Stand"]: {
     url: "https://www.roguefitness.com/rogue-s-1-squat-stand-2-0",
-    handler: rogueHandler,
+    handler: async (url, name) => rogueHandler(url, name, handleError),
   },
 };
 
