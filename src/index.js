@@ -2,7 +2,7 @@ const { Telegraf } = require("telegraf");
 const fs = require("fs");
 
 const log = require("./utils");
-const { rogueHandler } = require("./handlers");
+const { rogueHandler, repHandler } = require("./handlers");
 
 require("dotenv").config();
 
@@ -11,6 +11,10 @@ const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
 const prevStockFile = "./prev-stock.json";
 const productMap = {
+  ["Tru Athletics KG Change Plates"]: {
+    url: "https://tru-athletics.com/product/kilo/",
+    handler: async (url, name) => repHandler(url, name, handleError),
+  },
   ["Rogue KG Change Plates"]: {
     url: "https://www.roguefitness.com/rogue-kg-change-plates",
     handler: async (url, name) => rogueHandler(url, name, handleError),
