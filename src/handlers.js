@@ -1,5 +1,6 @@
 const { JSDOM } = require("jsdom");
 const axios = require("axios");
+const fetch = require("node-fetch");
 
 async function repHandler(url, name, handleError) {
   return axios
@@ -18,10 +19,10 @@ async function repHandler(url, name, handleError) {
 }
 
 async function rogueHandler(url, name, handleError) {
-  return axios
-    .get(url)
-    .then((response) => {
-      const dom = new JSDOM(response.data);
+  return fetch(url)
+    .then((res) => res.text())
+    .then((data) => {
+      const dom = new JSDOM(data);
       const document = dom.window.document;
 
       const rows = document.getElementsByClassName("grouped-item");
@@ -79,5 +80,5 @@ async function americanBarbellHandler(url, name, handleError) {
 module.exports = {
   rogueHandler,
   repHandler,
-  americanBarbellHandler
-}
+  americanBarbellHandler,
+};
