@@ -23,10 +23,6 @@ const productMap = {
     url: "https://www.roguefitness.com/rogue-kg-change-plates",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
-  // ["Tru Athletics KG Change Plates"]: {
-  //   url: "https://tru-athletics.com/product/kilo",
-  //   handler: async (url, name) => repHandler(url, name, handleError),
-  // },
   ["Rep Fitness KG Change Plates"]: {
     url: "https://www.repfitness.com/rep-kg-change-plates",
     handler: async (url, name) => repHandler(url, name, handleError),
