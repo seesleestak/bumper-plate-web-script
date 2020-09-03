@@ -4,6 +4,7 @@
   "description": "Web scraping script for bumper plates",
   "main": "src/index.js",
   "scripts": {
+    "status": "node src/status.js",
     "start": "node src/index.js"
   },
   "author": "",
