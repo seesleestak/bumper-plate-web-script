@@ -2,7 +2,7 @@ const { Telegraf } = require("telegraf");
 const fs = require("fs");
 
 const log = require("./utils");
-const { rogueHandler, repHandler } = require("./handlers");
+const { repHandler, rogueHandler } = require("./handlers");
 
 require("dotenv").config();
 
@@ -11,18 +11,34 @@ const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
 const prevStockFile = "./prev-stock.json";
 const productMap = {
-  ["Tru Athletics KG Change Plates"]: {
-    url: "https://tru-athletics.com/product/kilo/",
-    handler: async (url, name) => repHandler(url, name, handleError),
+  ["Rogue 28mm Training Bar"]: {
+    url: "https://www.roguefitness.com/rogue-28mm-training-bar",
+    handler: async (url, name) => rogueHandler(url, name, handleError),
+  },
+  ["Rogue 28mm IWF Olympic Weightlifting Bar"]: {
+    url: "https://www.roguefitness.com/rogue-iwf-olympic-wl-bar-w-center-knurl-bright-zinc",
+    handler: async (url, name) => rogueHandler(url, name, handleError),
   },
   ["Rogue KG Change Plates"]: {
     url: "https://www.roguefitness.com/rogue-kg-change-plates",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
+  // ["Tru Athletics KG Change Plates"]: {
+  //   url: "https://tru-athletics.com/product/kilo",
+  //   handler: async (url, name) => repHandler(url, name, handleError),
+  // },
+  ["Rep Fitness KG Change Plates"]: {
+    url: "https://www.repfitness.com/rep-kg-change-plates",
+    handler: async (url, name) => repHandler(url, name, handleError),
+  },
   ["Rogue S-1 Squat Stand"]: {
     url: "https://www.roguefitness.com/rogue-s-1-squat-stand-2-0",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
+  ["Rogue Echo Squat Stand"]: {
+    url: "https://www.roguefitness.com/rogue-echo-squat-stand-2-0",
+    handler: async (url, name) => rogueHandler(url, name, handleError),
+  }
 };
 
 async function handleError(e, type) {
