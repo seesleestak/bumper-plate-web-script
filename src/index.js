@@ -16,7 +16,8 @@ const productMap = {
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
   ["Rogue 28mm IWF Olympic Weightlifting Bar"]: {
-    url: "https://www.roguefitness.com/rogue-iwf-olympic-wl-bar-w-center-knurl-bright-zinc",
+    url:
+      "https://www.roguefitness.com/rogue-iwf-olympic-wl-bar-w-center-knurl-bright-zinc",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
   ["Rogue KG Change Plates"]: {
@@ -34,7 +35,11 @@ const productMap = {
   ["Rogue Echo Squat Stand"]: {
     url: "https://www.roguefitness.com/rogue-echo-squat-stand-2-0",
     handler: async (url, name) => rogueHandler(url, name, handleError),
-  }
+  },
+  // ["Rogue Pyrros 25mm bar"]: {
+  //   url: "https://www.roguefitness.com/rogue-pyrros-bar-25mm",
+  //   handler: async (url, name) => rogueHandler(url, name, handleError),
+  // },
 };
 
 async function handleError(e, type) {
@@ -71,7 +76,7 @@ Currently watching the following products:
 
 async function sendStockMessage(list, type, url) {
   log("list --- ", list);
-  const title = `<b>${type} Bumper Plates <u>IN STOCK</u>:</b>
+  const title = `<b>${type} <u>IN STOCK</u>:</b>
 
 `;
   const stockList = list.reduce((acc, item) => {
@@ -80,7 +85,8 @@ async function sendStockMessage(list, type, url) {
   }, "");
   const link = `
 <a href="${url}">Go to product page</a>`;
-  const copy = title.concat(stockList).concat(link);
+  const copy =
+    list.length > 1 ? title.concat(stockList).concat(link) : title.concat(link);
 
   await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, copy, {
     parse_mode: "HTML",
@@ -138,4 +144,4 @@ main();
 
 module.exports = {
   sendStatusMessage,
-}
+};
