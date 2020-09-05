@@ -25,6 +25,11 @@ async function rogueHandler(url, name, handleError) {
       const dom = new JSDOM(data);
       const document = dom.window.document;
 
+      const target = document.getElementsByClassName("product-cart-box")[0];
+
+      if (target && !target.getElementsByClassName("bin-out-of-stock")[0]) {
+        return [name] 
+      }
       const rows = document.getElementsByClassName("grouped-item");
       const rowList = [...rows];
 
