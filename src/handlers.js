@@ -1,16 +1,15 @@
 const { JSDOM } = require("jsdom");
-const axios = require("axios");
 const fetch = require("node-fetch");
 
 async function repHandler(url, name, handleError) {
-  return axios
-    .get(url)
+  return fetch(url)
+    .then((res) => res.text())
     .then((response) => {
-      const dom = new JSDOM(response.data);
+      const dom = new JSDOM(response);
       const document = dom.window.document;
 
-      const stockClass = document.getElementsByClassName("out-of-stock")[0];
-      if (!stockClass) {
+      const stockClass = document.getElementsByClassName("availability")[0];
+      if (stockClass.innerHTML.toLowerCase().includes('in stock')) {
         return ["In stock on site!"];
       }
       return [];
@@ -49,10 +48,10 @@ async function rogueHandler(url, name, handleError) {
 }
 
 async function americanBarbellHandler(url, name, handleError) {
-  return axios
-    .get(url)
+  return fetch(url)
+    .then((res) => res.text())
     .then((response) => {
-      const dom = new JSDOM(response.data);
+      const dom = new JSDOM(response);
       const document = dom.window.document;
 
       const tableId = "prb_product_table";
