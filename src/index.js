@@ -24,10 +24,6 @@ const productMap = {
     url: "https://www.roguefitness.com/rogue-kg-change-plates",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
-  ["Rep Fitness KG Change Plates"]: {
-    url: "https://www.repfitness.com/rep-kg-change-plates",
-    handler: async (url, name) => repHandler(url, name, handleError),
-  },
   ["Rogue S-1 Squat Stand"]: {
     url: "https://www.roguefitness.com/rogue-s-1-squat-stand-2-0",
     handler: async (url, name) => rogueHandler(url, name, handleError),
@@ -36,10 +32,10 @@ const productMap = {
     url: "https://www.roguefitness.com/rogue-echo-squat-stand-2-0",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
-  // ["Rogue Pyrros 25mm bar"]: {
-  //   url: "https://www.roguefitness.com/rogue-pyrros-bar-25mm",
-  //   handler: async (url, name) => rogueHandler(url, name, handleError),
-  // },
+  ["Rep Fitness KG Change Plates"]: {
+    url: "https://www.repfitness.com/rep-kg-change-plates",
+    handler: async (url, name) => repHandler(url, name, handleError),
+  },
 };
 
 async function handleError(e, type) {
