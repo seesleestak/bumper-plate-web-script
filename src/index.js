@@ -15,9 +15,8 @@ const productMap = {
     url: "https://www.roguefitness.com/rogue-28mm-training-bar",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
-  ["Rogue 28mm IWF Olympic Weightlifting Bar"]: {
-    url:
-      "https://www.roguefitness.com/rogue-iwf-olympic-wl-bar-w-center-knurl-bright-zinc",
+  ["Rogue 25mm Women's Training Bar"]: {
+    url: "https://www.roguefitness.com/rogue-womens-25mm-training-bar",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
   ["Rogue KG Change Plates"]: {
