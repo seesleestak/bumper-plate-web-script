@@ -80,8 +80,7 @@ async function sendStockMessage(list, type, url) {
   }, "");
   const link = `
 <a href="${url}">Go to product page</a>`;
-  const copy =
-    list.length > 1 ? title.concat(stockList).concat(link) : title.concat(link);
+  const copy = title.concat(stockList).concat(link);
 
   await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, copy, {
     parse_mode: "HTML",
