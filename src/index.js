@@ -2,7 +2,7 @@ const { Telegraf } = require("telegraf");
 const fs = require("fs");
 
 const log = require("./utils");
-const { repHandler, rogueHandler } = require("./handlers");
+const { rogueHandler } = require("./handlers");
 
 require("dotenv").config();
 
@@ -11,14 +11,6 @@ const bot = new Telegraf(TELEGRAM_BOT_TOKEN);
 
 const prevStockFile = "./prev-stock.json";
 const productMap = {
-  ["Rogue 28mm Training Bar"]: {
-    url: "https://www.roguefitness.com/rogue-28mm-training-bar",
-    handler: async (url, name) => rogueHandler(url, name, handleError),
-  },
-  ["Rogue 25mm Women's Training Bar"]: {
-    url: "https://www.roguefitness.com/rogue-womens-25mm-training-bar",
-    handler: async (url, name) => rogueHandler(url, name, handleError),
-  },
   ["Rogue KG Change Plates"]: {
     url: "https://www.roguefitness.com/rogue-kg-change-plates",
     handler: async (url, name) => rogueHandler(url, name, handleError),
@@ -27,14 +19,18 @@ const productMap = {
     url: "https://www.roguefitness.com/rogue-s-1-squat-stand-2-0",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
+  ["Rogue S-2 Squat Stand"]: {
+    url: "https://www.roguefitness.com/rogue-s2-squat-stand-2-0",
+    handler: async (url, name) => rogueHandler(url, name, handleError),
+  },
   ["Rogue Echo Squat Stand"]: {
     url: "https://www.roguefitness.com/rogue-echo-squat-stand-2-0",
     handler: async (url, name) => rogueHandler(url, name, handleError),
   },
-  ["Rep Fitness KG Change Plates"]: {
-    url: "https://www.repfitness.com/rep-kg-change-plates",
-    handler: async (url, name) => repHandler(url, name, handleError),
-  },
+  ["Rogue S-4 Squat Stand (Independent)"]: {
+    url: "https://www.roguefitness.com/rogue-s-4-squat-stand-2",
+    handler: async (url, name) => rogueHandler(url, name, handleError),
+  }
 };
 
 async function handleError(e, type) {
@@ -70,23 +66,32 @@ Currently watching the following products:
 }
 
 async function sendStockMessage(list, type, url) {
-  log("list --- ", list);
-  const title = `<b>${type} <u>IN STOCK</u>:</b>
+  let title = ''
+  if (list.length === 0) {
+    title = `<b>${type} <u>OUT OF STOCK</u></b>`
+  } else {
+    title = `<b>${type} <u>IN STOCK</u>:</b>
 
 `;
+  }
   const stockList = list.reduce((acc, item) => {
     return acc.concat(`- ${item}
 `);
   }, "");
   const link = `
 <a href="${url}">Go to product page</a>`;
-  const copy = title.concat(stockList).concat(link);
+
+  let copy = title;
+  if (list.length !== 0) {
+    copy = copy.concat(stockList)
+  }
+  copy = copy.concat(link)
 
   await bot.telegram.sendMessage(TELEGRAM_CHAT_ID, copy, {
     parse_mode: "HTML",
     disable_web_page_preview: true,
   });
-  log("Stock message sent!");
+  log(`${type} stock message sent!`);
 }
 
 async function writePrevStock(name, stocklist, prevStock) {
@@ -121,9 +126,10 @@ async function main() {
 
       log(`Getting ${name} stocklist...`);
       const stocklist = await handler(url, name);
+      log("stocklist --- ", name, stocklist);
+
       // Only send message if there is something in stock and the stock status has changed
       if (
-        stocklist.length > 0 &&
         JSON.stringify((prevStock[name] || []).sort()) !==
           JSON.stringify(stocklist.sort())
       ) {
@@ -134,8 +140,7 @@ async function main() {
   );
 }
 
-main();
-
 module.exports = {
   sendStatusMessage,
+  main,
 };
